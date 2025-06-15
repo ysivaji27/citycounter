@@ -22,12 +22,12 @@ Maven (for building the backend)
 
 Project Structure
 ```
-citycounter/ <br> 
+citycounter/   
     citycounter-ui/          # Spring Boot project  
         src/main/...         # Backend source code  
     citycounter-backend/     # React project   
         src/...              # Frontend source code  
-    README.md<br> 
+    README.md  
 ```
 Setup Instructions
 
