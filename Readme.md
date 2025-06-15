@@ -1,51 +1,48 @@
-City Counter App
+## City Counter App
 
 This is a full-stack application that allows users to enter a letter and returns the number of cities beginning with that letter. It fetches city data from the OpenWeatherMap sample API.
 
 Features
 
-Java 17 Spring Boot backend
+ * Java 17 Spring Boot backend
 
-React frontend
+ * React frontend
 
-Fetches city data from OpenWeatherMap
+ * Fetches city data from OpenWeatherMap
 
-Requirements
+ * Requirements
 
-Java 17+
+ * Java 17+
 
-Node.js and npm
+ * Node.js and npm
 
-axios
+ * axios
 
 Maven (for building the backend)
 
 Project Structure
-citycounter/
-├── citycounter-ui/            # Spring Boot project
-│   └── src/main/...    	   # Backend source code
-├── citycounter-backend/       # React project
-│   └── src/...         # Frontend source code
-└── README.md
-
+```
+citycounter/ <br> 
+    citycounter-ui/          # Spring Boot project
+        src/main/...         # Backend source code 
+    citycounter-backend/     # React project  
+        src/...              # Frontend source code 
+    README.md
+```
 Setup Instructions
 
 1. Clone the repository
-
-git clone https://github.com/your-username/city-counter-app.git
-cd city-counter-app
+git clone https://github.com/ysivaji27/citycounter.git
 
 2. Backend Setup (Java Spring Boot)
-
-cd backend
+cd citycounter-backend
 mvn clean install
 mvn spring-boot:run
 
 The backend server will start at: http://localhost:8080
 
 3. Frontend Setup (React)
-
-cd ../frontend
+cd ../citycounter-ui
 npm install
 npm start
 
@@ -65,8 +62,7 @@ y → 1 (Only Yafran)
 
 z → 3 (Zuwarah, Zawiya, Zlitan)
 
-Notes
-
+Notes:-
 The city data is fetched from the OpenWeatherMap sample API.
 
 
