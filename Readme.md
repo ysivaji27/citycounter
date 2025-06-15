@@ -34,36 +34,36 @@ Setup Instructions
 1. Clone the repository
 git clone https://github.com/ysivaji27/citycounter.git
 
-2. Backend Setup (Java Spring Boot)
-cd citycounter-backend
-mvn clean install
-mvn spring-boot:run
+2. Backend Setup (Java Spring Boot)<br>
+cd citycounter-backend <br>
+mvn clean install <br>
+mvn spring-boot:run <br>
 
-The backend server will start at: http://localhost:8080
+    The backend server will start at: http://localhost:8080
 
-3. Frontend Setup (React)
-cd ../citycounter-ui
-npm install
-npm start
+3. Frontend Setup (React) <br>
+cd ../citycounter-ui <br>
+npm install <br>
+npm start <br>
 
-The React app will start at: http://localhost:3000
+   The React app will start at: http://localhost:3000
 
-4. Using the App
+5. Using the App
 
-Enter a single letter (e.g., y or z) into the input field.
+    Enter a single letter (e.g., y or z) into the input field. <br>
 
-Click the "Get City Count" button.
+    Click the "Get City Count" button. <br>
 
-The number of cities starting with that letter will be displayed.
+    The number of cities starting with that letter will be displayed. <br>
 
-Example Queries
+    Example Queries <br>
 
-y → 1 (Only Yafran)
+    y → 1 (Only Yafran) <br>
 
-z → 3 (Zuwarah, Zawiya, Zlitan)
+    z → 3 (Zuwarah, Zawiya, Zlitan) <br>
 
-Notes:-
-The city data is fetched from the OpenWeatherMap sample API.
+Notes:- <br>
+    The city data is fetched from the OpenWeatherMap sample API. <br>
 
 
 ## Sample UI and postman screenshots for reference 
