@@ -66,5 +66,13 @@ Notes:-
 The city data is fetched from the OpenWeatherMap sample API.
 
 
+## Sample UI and postman screenshots for reference 
+
+<img width="1290" alt="Screenshot 2025-06-15 at 19 36 34" src="https://github.com/user-attachments/assets/84fdfa5b-6ed1-4daa-bfe6-38c8532c3ff6" />
+
+<img width="1290" alt="Screenshot 2025-06-15 at 19 34 43" src="https://github.com/user-attachments/assets/f2badbc0-40e3-4959-83dc-4002fbb52d2f" />
+
+
+
 
 
