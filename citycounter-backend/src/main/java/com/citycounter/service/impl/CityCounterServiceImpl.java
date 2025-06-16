@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.net.SocketTimeoutException;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static com.citycounter.util.CityCounterUtil.*;
@@ -40,7 +40,7 @@ public class CityCounterServiceImpl implements CityCounterService {
     }
 
     @Override
-    public int  getCityCountByLetter(String letter) {
+    public int  getCityCountByLetter(String letter) throws IOException {
         logger.info(REQ_RECEIVED_MSG, CityCounterServiceImpl.class.getCanonicalName(), letter);
         Request request = new Request.Builder().url(openweathermapUrl).build();
         try (Response response = httpClient.newCall(request).execute()) {
@@ -68,12 +68,6 @@ public class CityCounterServiceImpl implements CityCounterService {
                 logger.error("Unexpected HTTP status code  {} {}  ",statusCode,errorBody);
                 throw new ServiceUnavailableException("Unexpected response from external weather API: " + errorBody);
             }
-        } catch (ServiceUnavailableException | SocketTimeoutException exception) {
-            throw new ServiceUnavailableException(exception);
-        } catch (WeatherApiException apiException) {
-            throw new WeatherApiException(apiException, apiException.httpStatus);
-        } catch (Exception exception) {
-            throw new WeatherApiException("An unexpected error occurred while processing weather data.", exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

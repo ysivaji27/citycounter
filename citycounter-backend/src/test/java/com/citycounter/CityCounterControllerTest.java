@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.io.IOException;
+
 import static org.mockito.Mockito.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,4 +41,13 @@ class CityCounterControllerTest {
                 .andExpect(content().string(String.valueOf(expectedCount)));
     }
 
+    @Test
+    @DisplayName("Should return city count from service")
+    void getCityCount_shouldReturnCount2() throws Exception {
+        when(cityCounterService.getCityCountByLetter(anyString())).thenThrow(new IOException("Network unreachable"));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/city-count?letter=A"))
+                .andExpect(status().is5xxServerError());
+    }
 }

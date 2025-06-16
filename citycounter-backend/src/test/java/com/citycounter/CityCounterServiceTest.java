@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,7 +47,25 @@ class CityCounterServiceTest {
     }
 
     @Test
-    @DisplayName("for Y Should return WeatherResponse on successful 200 OK")
+    @DisplayName("for XX Should return 0 from WeatherResponse on successful 200 OK")
+    void testCityCountByLetter_XX_success() throws IOException {
+        // Configure mockCall to return a successful 200 OK response
+        Response mockResponse = new Response.Builder()
+                .request(new Request.Builder().url("http://test.api/weather/y").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .message("OK")
+                .body(ResponseBody.create(MOCK_SUCCESS_JSON, okhttp3.MediaType.parse("application/json")))
+                .build();
+
+        when(mockCall.execute()).thenReturn(mockResponse);
+
+        int  response = cityCounterService.getCityCountByLetter("XX");
+        assertEquals(0, response);
+    }
+
+    @Test
+    @DisplayName("for Y Should return 1 from WeatherResponse on successful 200 OK")
     void testCityCountByLetter_Y_success() throws IOException {
         // Configure mockCall to return a successful 200 OK response
         Response mockResponse = new Response.Builder()
@@ -67,7 +84,7 @@ class CityCounterServiceTest {
 
 
     @Test
-    @DisplayName("for Z Should return WeatherResponse on successful 200 OK")
+    @DisplayName("for Z Should return 3 from  WeatherResponse on successful 200 OK")
     void testCityCountByLetter_Z_success() throws IOException {
         // Configure mockCall to return a successful 200 OK response
         Response mockResponse = new Response.Builder()
@@ -83,6 +100,8 @@ class CityCounterServiceTest {
         int  response = cityCounterService.getCityCountByLetter("z");
         assertEquals(3, response);
     }
+
+
 
     @Test
     @DisplayName("Should throw BadRequestException for 400 Bad Request")
@@ -135,7 +154,7 @@ class CityCounterServiceTest {
     @DisplayName("Should throw ServiceUnavailableException for SocketTimeoutException")
     void testCityCountByLetter_timeoutException() throws IOException {
         // Arrange
-        when(mockCall.execute()).thenThrow(new SocketTimeoutException("Read timed out"));
+        when(mockCall.execute()).thenThrow(new ServiceUnavailableException("Read timed out"));
         ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
 
         // Act & Assert
@@ -153,11 +172,10 @@ class CityCounterServiceTest {
         when(mockCall.execute()).thenThrow(new IOException("Network unreachable"));
         ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
         // Act & Assert
-        WeatherApiException thrown = assertThrows(WeatherApiException.class, () -> {
+        IOException thrown = assertThrows(IOException.class, () -> {
             cityCounterService.getCityCountByLetter("DisconnectedCity");
         });
-        assertEquals("An unexpected error occurred while processing weather data.", thrown.getMessage());
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, thrown.getHttpStatus());
+        assertEquals("Network unreachable", thrown.getMessage());
     }
 
 }

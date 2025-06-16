@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handles any other unexpected exceptions not specifically caught by other handlers.
      * This acts as a fallback for unhandled runtime errors.
      */
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(IOException.class)
     public ResponseEntity<Object> handleAllOtherExceptions(
             Exception exception, WebRequest request) {
 
