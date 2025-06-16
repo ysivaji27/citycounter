@@ -51,8 +51,8 @@ class CityCounterServiceTest {
     }
 
     @Test
-    @DisplayName("Should return WeatherResponse on successful 200 OK")
-    void getWeatherSync_success() throws IOException {
+    @DisplayName("for Y Should return WeatherResponse on successful 200 OK")
+    void testCityCountByLetter_Y_success() throws IOException {
         // Configure mockCall to return a successful 200 OK response
         Response mockResponse = new Response.Builder()
                 .request(new Request.Builder().url("http://test.api/weather/y").build())
@@ -69,8 +69,26 @@ class CityCounterServiceTest {
     }
 
     @Test
+    @DisplayName("for Z Should return WeatherResponse on successful 200 OK")
+    void testCityCountByLetter_Z_success() throws IOException {
+        // Configure mockCall to return a successful 200 OK response
+        Response mockResponse = new Response.Builder()
+                .request(new Request.Builder().url("http://test.api/weather/y").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .message("OK")
+                .body(ResponseBody.create(MOCK_SUCCESS_JSON, okhttp3.MediaType.parse("application/json")))
+                .build();
+
+        when(mockCall.execute()).thenReturn(mockResponse);
+
+        int  response = cityCounterService.getCityCountByLetter("z");
+        assertEquals(3, response);
+    }
+
+    @Test
     @DisplayName("Should throw BadRequestException for 400 Bad Request")
-    void getWeatherSync_400BadRequest() throws IOException {
+    void testCityCountByLetter_400BadRequest() throws IOException {
         // Arrange
         Response mockResponse = new Response.Builder()
                 .request(new Request.Builder().url("http://test.api/weather/InvalidCity").build())
@@ -94,7 +112,7 @@ class CityCounterServiceTest {
 
     @Test
     @DisplayName("Should throw ServiceUnavailableException for 500 Internal Server Error")
-    void getWeatherSync_500InternalServerError() throws IOException {
+    void testCityCountByLetter_500InternalServerError() throws IOException {
         // Arrange
         Response mockResponse = new Response.Builder()
                 .request(new Request.Builder().url("http://test.api/weather/CityWithError").build())
@@ -117,7 +135,7 @@ class CityCounterServiceTest {
 
     @Test
     @DisplayName("Should throw ServiceUnavailableException for SocketTimeoutException")
-    void getWeatherSync_timeoutException() throws IOException {
+    void testCityCountByLetter_timeoutException() throws IOException {
         // Arrange
         when(mockCall.execute()).thenThrow(new SocketTimeoutException("Read timed out"));
         ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
@@ -132,7 +150,7 @@ class CityCounterServiceTest {
 
     @Test
     @DisplayName("Should throw WeatherApiException for general IOException")
-    void getWeatherSync_generalIOException() throws IOException {
+    void testCityCountByLetter_generalIOException() throws IOException {
         // Arrange
         when(mockCall.execute()).thenThrow(new IOException("Network unreachable"));
         ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);

@@ -3,6 +3,7 @@ package com.citycounter;
 import com.citycounter.controller.CityCounterController;
 import com.citycounter.service.CityCounterService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
@@ -21,6 +22,7 @@ class CityCounterControllerTest {
     }
 
     @Test
+    @DisplayName("for Y Should return WeatherResponse on successful 200 OK")
     void testGetCityCountByLetter_Y_200_Status() {
         String letter = "y";
         int expectedCount = 1;
@@ -34,6 +36,7 @@ class CityCounterControllerTest {
     }
 
     @Test
+    @DisplayName("for Z Should return WeatherResponse on successful 200 OK")
     void testGetCityCountByLetter_Z_200_Status() {
         String letter = "z";
         int expectedCount = 3;
