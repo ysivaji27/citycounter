@@ -65,6 +65,9 @@ npm start <br>
 Notes:- <br>
     The city data is fetched from the OpenWeatherMap sample API. <br>
 
+API Reference URLs 
+  * API DOCS URL : http://localhost:8080/v3/api-docs<br>
+  * Swagger URL : http://localhost:8080/swagger-ui/index.html<br>
 
 ## Sample UI and postman screenshots for reference 
 
