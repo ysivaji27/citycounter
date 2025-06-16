@@ -1,5 +1,6 @@
 package com.citycounter.service.impl;
 
+import com.citycounter.exceptionhandler.ServiceUnavailableException;
 import com.citycounter.exceptionhandler.WeatherApiException;
 import com.citycounter.model.WeatherResponse;
 import com.citycounter.service.CityCounterService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import static com.citycounter.util.CityCounterUtil.*;
@@ -61,15 +63,16 @@ public class CityCounterServiceImpl implements CityCounterService {
                 }
 
             } else if (statusCode >= 400 && statusCode < 500) {
-                if (statusCode == HttpStatus.BAD_REQUEST.value()) {
-                    throw new BadRequestException("Bad request to external weather API for identifier '" + letter + "': " + responseBody);
-                }
                 throw new WeatherApiException("Client error from external weather API: " + responseBody, HttpStatus.valueOf(statusCode));
             } else {
                 String errorBody = response.body().string();
                 logger.error("Unexpected HTTP status code  {} {}  ",statusCode,errorBody);
-                throw new WeatherApiException("Unexpected response from external weather API: " + errorBody, HttpStatus.valueOf(statusCode));
+                throw new ServiceUnavailableException("Unexpected response from external weather API: " + errorBody);
             }
+        } catch (ServiceUnavailableException | SocketTimeoutException exception) {
+            throw new ServiceUnavailableException(exception);
+        } catch (WeatherApiException apiException) {
+            throw new WeatherApiException(apiException, apiException.httpStatus);
         } catch (Exception exception) {
             throw new WeatherApiException("An unexpected error occurred while processing weather data.", exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
