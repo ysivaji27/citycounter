@@ -3,6 +3,7 @@ package com.citycounter;
 import com.citycounter.controller.CityCounterController;
 import com.citycounter.exceptionhandler.ServiceUnavailableException;
 import com.citycounter.exceptionhandler.WeatherApiException;
+import com.citycounter.httpclient.OkHttpClientService;
 import com.citycounter.service.impl.CityCounterServiceImpl;
 import okhttp3.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,10 +28,16 @@ class CityCounterServiceTest {
     private CityCounterServiceImpl cityCounterService;
 
     @Autowired
+    private  OkHttpClientService okHttpClientService;
+
+    @Autowired
     private CityCounterController cityCounterController;
 
     @Mock // Creates a mock instance of Call.Factory (which OkHttpClient implements)
     private OkHttpClient httpClient; // Mock OkHttpClient to control its behavior
+
+    @Mock // Creates a mock instance of Call.Factory (which OkHttpClient implements)
+    private Request  request; // Mock OkHttpClient to control its behavior
 
     @Mock // Mocks the Call object returned by OkHttpClient.newCall()
     private Call mockCall;
@@ -41,8 +48,12 @@ class CityCounterServiceTest {
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
-        ReflectionTestUtils.setField(cityCounterService, "openweathermapUrl", "http://test.api/weather");
+        ReflectionTestUtils.setField(okHttpClientService, "httpClient", httpClient);
+        ReflectionTestUtils.setField(okHttpClientService, "openweathermapUrl", "http://test.api/weather");
+        ReflectionTestUtils.setField(okHttpClientService, "requestTimeout", 10);
+        ReflectionTestUtils.setField(okHttpClientService, "maxIdleConnections", 10);
+        ReflectionTestUtils.setField(okHttpClientService, "keepAliveDuration", 5);
+        ReflectionTestUtils.setField(okHttpClientService, "request", request);
         when(httpClient.newCall(any(Request.class))).thenReturn(mockCall);
     }
 
@@ -115,7 +126,6 @@ class CityCounterServiceTest {
                 .body(ResponseBody.create(MOCK_ERROR_JSON, okhttp3.MediaType.parse("application/json")))
                 .build();
 
-        ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
         when(mockCall.execute()).thenReturn(mockResponse);
 
 
@@ -139,7 +149,6 @@ class CityCounterServiceTest {
                 .body(ResponseBody.create("{\"error\":\"Internal Server Error\"}", okhttp3.MediaType.parse("application/json")))
                 .build();
 
-        ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
         when(mockCall.execute()).thenReturn(mockResponse);
 
         // Act & Assert
@@ -155,7 +164,7 @@ class CityCounterServiceTest {
     void testCityCountByLetter_timeoutException() throws IOException {
         // Arrange
         when(mockCall.execute()).thenThrow(new ServiceUnavailableException("Read timed out"));
-        ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
+
 
         // Act & Assert
         ServiceUnavailableException thrown = assertThrows(ServiceUnavailableException.class, () -> {
@@ -170,7 +179,7 @@ class CityCounterServiceTest {
     void testCityCountByLetter_generalIOException() throws IOException {
         // Arrange
         when(mockCall.execute()).thenThrow(new IOException("Network unreachable"));
-        ReflectionTestUtils.setField(cityCounterService, "httpClient", httpClient);
+
         // Act & Assert
         IOException thrown = assertThrows(IOException.class, () -> {
             cityCounterService.getCityCountByLetter("DisconnectedCity");

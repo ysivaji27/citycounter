@@ -1,5 +1,6 @@
 package com.citycounter.exceptionhandler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +18,7 @@ import java.util.Map;
  * This class handles exceptions thrown by the application and formats them into a consistent JSON response.
  * It uses Spring's @ControllerAdvice to apply to all controllers in the application.
  */
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -36,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("path", request.getDescription(false).replace("uri=", "")); // Extract clean path
 
         // Log the exception details for debugging
-        logger.error("Handling WeatherApiException:  ", ex);
+        log.error("Handling WeatherApiException:  ", ex);
 
         return new ResponseEntity<>(body, ex.getHttpStatus());
     }
@@ -57,7 +59,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("path", request.getDescription(false).replace("uri=", ""));
 
         // Log the full stack trace for unexpected errors
-        logger.error("Handling unexpected exception:",exception);
+        log.error("Handling unexpected exception:",exception);
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
