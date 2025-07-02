@@ -42,7 +42,7 @@ class CityCounterControllerTest {
     }
 
     @Test
-    @DisplayName("Should return city count from service")
+    @DisplayName("TEST 500 Error  Network unreachable")
     void getCityCount_shouldReturnCount2() throws Exception {
         when(cityCounterService.getCityCountByLetter(anyString())).thenThrow(new IOException("Network unreachable"));
 
